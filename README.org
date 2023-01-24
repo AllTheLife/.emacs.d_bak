@@ -5,9 +5,9 @@ AllTheLife 的一份Emacs配置。
 
 ** Screenshots
 
-[[/home/was/.emacs.d/screenshots/1.png]]
+[[https://raw.githubusercontent.com/AllTheLife/.emacs.d/main/screenshots/1.png]]
 
-[[/home/was/.emacs.d/screenshots/2.png]]
+[[https://raw.githubusercontent.com/AllTheLife/.emacs.d/main/screenshots/2.png]]
 
 ** Installation
 
