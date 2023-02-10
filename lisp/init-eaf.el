@@ -9,6 +9,7 @@
 (require 'eaf-org-previewer)
 (require 'eaf-pdf-viewer)
 (require 'eaf-system-monitor)
+(require 'eaf-file-manager)
 (require 'eaf-all-the-icons)
 
 (setq eaf-browser-continue-where-left-off t

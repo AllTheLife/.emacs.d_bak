@@ -58,8 +58,9 @@
 
 (defun restart-sort-tab ()
   (interactive)
-  (sort-tab-turn-off)
-  (sort-tab-turn-on))
+  (with-no-warnings
+    (sort-tab-turn-off)
+    (sort-tab-turn-on)))
 (advice-add 'delete-other-windows :after 'restart-sort-tab) ;; 修复 (delete-other-windows) 后sort-tab消失的问题
 
 

@@ -18,6 +18,10 @@
   (add-hook 'c-mode-hook 'company-mode)
   (add-hook 'python-mode-hook 'company-mode)
   (add-hook 'sh-mode-hook 'company-mode)
+  (add-hook 'c++-ts-mode-hook 'company-mode)
+  (add-hook 'c-ts-mode-hook 'company-mode)
+  (add-hook 'python-ts-mode-hook 'company-mode)
+  (add-hook 'sh-ts-mode-hook 'company-mode)
 
   (when (fboundp 'diminish)
     (add-hook 'company-mode-hook (lambda () (diminish 'company-mode))))
@@ -94,6 +98,10 @@
   (require-package 'prescient)
   (when (maybe-require-package 'company-prescient)
     (add-hook 'company-mode-hook (lambda () (company-prescient-mode 1))))
+
+  ;; 与 Tabnine集成
+  ;; (require-package 'company-tabnine)
+  ;; (add-to-list 'company-backends #'company-tabnine)
 
   ;; 图标和快速帮助
   (require-package 'company-box)

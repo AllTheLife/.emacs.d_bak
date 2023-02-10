@@ -11,7 +11,9 @@
 
 (add-hook 'c++-mode-hook 'citre-mode)
 
+
 (require-package 'ggtags)
+(add-hook 'c++-mode-hook 'ggtags-mode)
 
 
 (provide 'init-ctags)

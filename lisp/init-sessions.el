@@ -8,15 +8,7 @@
 (desktop-save-mode 1)
 
 
-;; 使Emacs在退出时不询问是否要结束进程
-;; See `https://emacs.stackexchange.com/questions/26565/exiting-emacs-without-confirmation-to-kill-running-processes'
-(setq confirm-kill-processes nil)
-
-
 ;; 重启后回复历史和寄存器
-
-(when (maybe-require-package 'savehist)
-  (add-hook 'after-init-hook 'savehist-mode))
 
 (require-package 'session)
 

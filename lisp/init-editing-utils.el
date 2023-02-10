@@ -2,75 +2,87 @@
 ;;; Commentary:
 ;;; Code:
 
-(when (fboundp 'electric-pair-mode)
-  (add-hook 'org-mode-hook 'electric-pair-mode)
-  (add-hook 'emacs-lisp-mode-hook 'electric-pair-mode))
-(add-hook 'after-init-hook 'electric-indent-mode)
+;; (when (fboundp 'electric-pair-mode)
+;;   (add-hook 'org-mode-hook 'electric-pair-mode)
+;;   (add-hook 'emacs-lisp-mode-hook 'electric-pair-mode))
+;; (add-hook 'after-init-hook 'electric-indent-mode)
 
-(install-vc-package "https://github.com/manateelazycat/grammatical-edit" "grammatical-edit")
-(add-hook 'after-init-hook (lambda () (require 'grammatical-edit)))
-(with-eval-after-load 'grammatical-edit
-  (dolist (hook (list
-                 'c-mode-common-hook
-                 'c-mode-hook
-                 'c++-mode-hook
-                 'java-mode-hook
-                 'haskell-mode-hook
-                 'emacs-lisp-mode-hook
-                 'lisp-interaction-mode-hook
-                 'lisp-mode-hook
-                 'maxima-mode-hook
-                 'ielm-mode-hook
-                 'sh-mode-hook
-                 'makefile-gmake-mode-hook
-                 'php-mode-hook
-                 'python-mode-hook
-                 'js-mode-hook
-                 'go-mode-hook
-                 'qml-mode-hook
-                 'jade-mode-hook
-                 'css-mode-hook
-                 'ruby-mode-hook
-                 'coffee-mode-hook
-                 'rust-mode-hook
-                 'qmake-mode-hook
-                 'lua-mode-hook
-                 'swift-mode-hook
-                 'minibuffer-inactive-mode-hook
-                 'typescript-mode-hook
-                 ))
-    (add-hook hook '(lambda () (grammatical-edit-mode 1))))
-  (define-key grammatical-edit-mode-map (kbd "(") 'grammatical-edit-open-round)
-  (define-key grammatical-edit-mode-map (kbd "[") 'grammatical-edit-open-bracket)
-  (define-key grammatical-edit-mode-map (kbd "{") 'grammatical-edit-open-curly)
-  (define-key grammatical-edit-mode-map (kbd ")") 'grammatical-edit-close-round)
-  (define-key grammatical-edit-mode-map (kbd "]") 'grammatical-edit-close-bracket)
-  (define-key grammatical-edit-mode-map (kbd "}") 'grammatical-edit-close-curly)
-  (define-key grammatical-edit-mode-map (kbd "=") 'grammatical-edit-equal)
+(install-vc-package "https://github.com/manateelazycat/fingertip" "fingertip")
+(require 'fingertip)
+(dolist (hook (list
+               'c-mode-common-hook
+               'c-mode-hook
+               'c++-mode-hook
+               'java-mode-hook
+               'haskell-mode-hook
+               'emacs-lisp-mode-hook
+               'lisp-interaction-mode-hook
+               'lisp-mode-hook
+               'maxima-mode-hook
+               'ielm-mode-hook
+               'sh-mode-hook
+               'makefile-gmake-mode-hook
+               'php-mode-hook
+               'python-mode-hook
+               'js-mode-hook
+               'go-mode-hook
+               'qml-mode-hook
+               'jade-mode-hook
+               'css-mode-hook
+               'ruby-mode-hook
+               'coffee-mode-hook
+               'rust-mode-hook
+               'qmake-mode-hook
+               'lua-mode-hook
+               'swift-mode-hook
+               'minibuffer-inactive-mode-hook
+               'typescript-mode-hook
 
-  (define-key grammatical-edit-mode-map (kbd "%") 'grammatical-edit-match-paren)
-  (define-key grammatical-edit-mode-map (kbd "\"") 'grammatical-edit-double-quote)
-  (define-key grammatical-edit-mode-map (kbd "'") 'grammatical-edit-single-quote)
+               'c-ts-mode-hook
+               'c++-ts-mode-hook
+               'cmake-ts-mode-hook
+               'toml-ts-mode-hook
+               'css-ts-mode-hook
+               'js-ts-mode-hook
+               'json-ts-mode-hook
+               'python-ts-mode-hook
+               'bash-ts-mode-hook
+               'typescript-ts-mode-hook
+               ))
+  (add-hook hook '(lambda () (fingertip-mode 1))))
 
-  (define-key grammatical-edit-mode-map (kbd "SPC") 'grammatical-edit-space)
-  ;; (define-key grammatical-edit-mode-map (kbd "RET") 'grammatical-edit-newline)  ;; 这会使 `lsp-bridge' 工作不良
+(with-eval-after-load 'fingertip
+  (define-key fingertip-mode-map (kbd "(") 'fingertip-open-round)
+  (define-key fingertip-mode-map (kbd "[") 'fingertip-open-bracket)
+  (define-key fingertip-mode-map (kbd "{") 'fingertip-open-curly)
+  (define-key fingertip-mode-map (kbd ")") 'fingertip-close-round)
+  (define-key fingertip-mode-map (kbd "]") 'fingertip-close-bracket)
+  (define-key fingertip-mode-map (kbd "}") 'fingertip-close-curly)
+  (define-key fingertip-mode-map (kbd "=") 'fingertip-equal)
 
-  (define-key grammatical-edit-mode-map (kbd "M-o") 'grammatical-edit-backward-delete)
-  (define-key grammatical-edit-mode-map (kbd "C-d") 'grammatical-edit-forward-delete)
-  (define-key grammatical-edit-mode-map (kbd "C-k") 'grammatical-edit-kill)
+  (define-key fingertip-mode-map (kbd "%") 'fingertip-match-paren)
+  (define-key fingertip-mode-map (kbd "\"") 'fingertip-double-quote)
+  (define-key fingertip-mode-map (kbd "'") 'fingertip-single-quote)
 
-  (define-key grammatical-edit-mode-map (kbd "M-\"") 'grammatical-edit-wrap-double-quote)
-  (define-key grammatical-edit-mode-map (kbd "M-'") 'grammatical-edit-wrap-single-quote)
-  (define-key grammatical-edit-mode-map (kbd "M-[") 'grammatical-edit-wrap-bracket)
-  (define-key grammatical-edit-mode-map (kbd "M-{") 'grammatical-edit-wrap-curly)
-  (define-key grammatical-edit-mode-map (kbd "M-(") 'grammatical-edit-wrap-round)
-  (define-key grammatical-edit-mode-map (kbd "M-)") 'grammatical-edit-unwrap)
+  (define-key fingertip-mode-map (kbd "SPC") 'fingertip-space)
+  (define-key fingertip-mode-map (kbd "RET") 'fingertip-newline)
 
-  (define-key grammatical-edit-mode-map (kbd "M-n") 'grammatical-edit-jump-right)
-  (define-key grammatical-edit-mode-map (kbd "M-p") 'grammatical-edit-jump-left)
-  (define-key grammatical-edit-mode-map (kbd "M-:") 'grammatical-edit-jump-out-pair-and-newline)
+  (define-key fingertip-mode-map (kbd "M-o") 'fingertip-backward-delete)
+  (define-key fingertip-mode-map (kbd "C-d") 'fingertip-forward-delete)
+  (define-key fingertip-mode-map (kbd "C-k") 'fingertip-kill)
 
-  (define-key grammatical-edit-mode-map (kbd "C-j") 'grammatical-edit-jump-up))
+  (define-key fingertip-mode-map (kbd "M-\"") 'fingertip-wrap-double-quote)
+  (define-key fingertip-mode-map (kbd "M-'") 'fingertip-wrap-single-quote)
+  (define-key fingertip-mode-map (kbd "M-[") 'fingertip-wrap-bracket)
+  (define-key fingertip-mode-map (kbd "M-{") 'fingertip-wrap-curly)
+  (define-key fingertip-mode-map (kbd "M-(") 'fingertip-wrap-round)
+  (define-key fingertip-mode-map (kbd "M-)") 'fingertip-unwrap)
+
+  (define-key fingertip-mode-map (kbd "M-p") 'fingertip-jump-left)
+  (define-key fingertip-mode-map (kbd "M-n") 'fingertip-jump-right)
+  (define-key fingertip-mode-map (kbd "M-:") 'fingertip-jump-up)
+
+  (define-key fingertip-mode-map (kbd "C-j") 'fingertip-jump-out-pair-and-newline))
 
 
 ;;; 一些基础选项
@@ -252,7 +264,7 @@
   (require-package 'vundo)
 
   (setq undo-fu-session-incompatible-files '("/COMMIT_EDITMSG\\'" "/git-rebase-todo\\'"))
-  (add-hook 'after-init-hook 'global-undo-fu-session-mode)
+  (add-hook 'after-init-hook 'undo-fu-session-global-mode)
   (global-unset-key (kbd "C-z"))
   (global-set-key (kbd "C-z")   'undo-fu-only-undo)
   (global-set-key (kbd "C-S-z") 'undo-fu-only-redo))
@@ -288,6 +300,8 @@
 (when (fboundp 'meow-insert-mode)
   (advice-add 'blink-search :after 'meow-insert-mode))
 
+;; (add-hook 'after-init-hook 'blink-search)
+
 
 ;; 必要时以root用户编辑文件
 (require-package 'sudo-edit)
@@ -322,13 +336,31 @@
 ;; 快速编辑
 (install-vc-package "https://github.com/manateelazycat/thing-edit" "thing-edit")
 (add-hook 'after-init-hook (lambda () (require 'thing-edit)))
-(global-set-key (kbd "C-c e") 'thing-cut-sexp)
+(global-unset-key (kbd "C-c e"))
+(global-set-key (kbd "C-c e b") 'thing-cut-sexp)
+(global-set-key (kbd "C-c e u") 'thing-cut-url)
+(global-set-key (kbd "C-c e p") 'thing-cut-parentheses)
+(global-set-key (kbd "C-c e s") 'thing-cut-sentence)
+(global-set-key (kbd "C-c e w") 'thing-cut-word)
+(global-set-key (kbd "C-c e p") 'thing-cut-page)
+(global-set-key (kbd "C-c e l") 'thing-cut-line)
+(global-set-key (kbd "C-c e f") 'thing-cut-defun)
+(global-set-key (kbd "C-c e w") 'thing-cut-whole-buffer)
+(global-set-key (kbd "C-c c b") 'thing-copy-sexp)
+(global-set-key (kbd "C-c c u") 'thing-copy-url)
+(global-set-key (kbd "C-c c p") 'thing-copy-parentheses)
+(global-set-key (kbd "C-c c s") 'thing-copy-sentence)
+(global-set-key (kbd "C-c c w") 'thing-copy-word)
+(global-set-key (kbd "C-c c p") 'thing-copy-page)
+(global-set-key (kbd "C-c c l") 'thing-copy-line)
+(global-set-key (kbd "C-c c f") 'thing-copy-defun)
+(global-set-key (kbd "C-c c w") 'thing-copy-whole-buffer)
 
 
 ;; 建立Deno运行环境
 (require-package 'websocket)
 (install-vc-package "https://github.com/manateelazycat/deno-bridge" "deno-bridge")
-(require 'deno-bridge)
+(add-hook 'after-init-hook (lambda () (require 'deno-bridge)))
 
 
 ;; 插入翻译后的内容
@@ -367,6 +399,48 @@
 (require 'jieba)
 (add-hook 'after-init-hook 'jieba-mode)
 (global-set-key (kbd "M-m") 'jieba-mark-word)
+
+(install-vc-package "https://github.com/Eason0210/im-cursor-chg" "im-cursor-chg")
+(with-eval-after-load 'rime
+  (require 'im-cursor-chg)
+  (cursor-chg-mode 1))
+
+
+;; Eshell强化配置
+(install-vc-package "https://github.com/manateelazycat/aweshell" "aweshell")
+(require 'aweshell)
+(setq aweshell-auto-suggestion-p t)
+(global-set-key (kbd "C-c r") 'aweshell-dedicated-toggle)
+(global-set-key (kbd "C-c C-r") 'aweshell-new)
+
+
+;; 轻松粘贴代码到笔记里
+(install-vc-package "https://github.com/AmaiKinono/clue" "clue")
+(require 'clue)
+(add-hook 'find-file-hook #'clue-auto-enable-clue-mode)
+
+
+;; 记录上一次文件打开的位置, 并在再次打开该文件的时候自动跳转到该位置
+;; (when (maybe-require-package 'savehist)
+;;   (add-hook 'after-init-hook 'savehist-mode))
+;; (save-place-mode 1)
+;; (setq session-save-file-coding-system 'utf-8)
+
+
+;; 运行Org-mode中的代码片段
+(org-babel-do-load-languages
+      'org-babel-load-languages
+      '((emacs-lisp . t)
+        (C . t)
+        (java . t)
+        (js . t)
+        (ruby . t)
+        (ditaa . t)
+        (python . t)
+        (shell . t)
+        (latex . t)
+        (plantuml . t)
+        (R . t)))
 
 
 (provide 'init-editing-utils)

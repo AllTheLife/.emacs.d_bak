@@ -109,10 +109,10 @@
 
 
 ;; 安装第三方软件包
-(defun install-vc-package (url name)
-  (unless (file-exists-p (concat "~/.emacs.d/site-packages/" name))
-    (shell-command (concat "git clone " url " ~/.emacs.d/site-packages/" name " &")))
-  (add-to-list 'load-path (concat "~/.emacs.d/site-packages/" name)))
+(defun install-vc-package (url name))
+  ;; (unless (file-exists-p (concat "~/.emacs.d/site-packages/" name))
+  ;;   (shell-command (concat "git clone " url " ~/.emacs.d/site-packages/" name)))
+  ;; (add-to-list 'load-path (concat "~/.emacs.d/site-packages/" name)))
 
 
 (provide 'init-elpa)

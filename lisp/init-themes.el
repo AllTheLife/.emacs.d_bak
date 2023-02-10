@@ -2,8 +2,8 @@
 ;;; Commentary:
 ;;; Code:
 
-(require-package 'color-theme-sanityinc-tomorrow)
-(require-package 'ef-themes)
+;; (require-package 'color-theme-sanityinc-tomorrow)
+;; (require-package 'ef-themes)
 (require-package 'doom-themes)
 
 ;; 不提示确认主题安全。这避免了在Emacs > 26.3 上首次启动时出现的问题。
