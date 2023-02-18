@@ -2,11 +2,36 @@
 ;;; Commentary:
 ;;; Code:
 
-;; (when (fboundp 'electric-pair-mode)
-;;   (add-hook 'org-mode-hook 'electric-pair-mode)
-;;   (add-hook 'emacs-lisp-mode-hook 'electric-pair-mode))
-;; (add-hook 'after-init-hook 'electric-indent-mode)
 
+;;; 一些基础选项
+
+(global-hl-line-mode)
+(setq-default
+ column-number-mode t
+ ediff-split-window-function 'split-window-horizontally
+ ediff-window-setup-function 'ediff-setup-windows-plain
+ indent-tabs-mode nil
+ create-lockfiles nil
+ auto-save-default nil
+ make-backup-files nil
+ mouse-yank-at-point t
+ scroll-preserve-screen-position 'always
+ tooltip-delay 1.5
+ truncate-lines nil
+ truncate-partial-width-windows nil)
+
+(add-hook 'after-init-hook 'delete-selection-mode)
+
+(add-hook 'after-init-hook 'global-auto-revert-mode)
+(setq global-auto-revert-non-file-buffers t
+      auto-revert-verbose nil)
+(with-eval-after-load 'autorevert
+  (diminish 'auto-revert-mode))
+
+(add-hook 'after-init-hook 'transient-mark-mode)
+
+
+;;; 结构化编辑
 (install-vc-package "https://github.com/manateelazycat/fingertip" "fingertip")
 (require 'fingertip)
 (dolist (hook (list
@@ -85,35 +110,7 @@
   (define-key fingertip-mode-map (kbd "C-j") 'fingertip-jump-out-pair-and-newline))
 
 
-;;; 一些基础选项
-
-(global-hl-line-mode)
-(setq-default
- column-number-mode t
- ediff-split-window-function 'split-window-horizontally
- ediff-window-setup-function 'ediff-setup-windows-plain
- indent-tabs-mode nil
- create-lockfiles nil
- auto-save-default nil
- make-backup-files nil
- mouse-yank-at-point t
- scroll-preserve-screen-position 'always
- tooltip-delay 1.5
- truncate-lines nil
- truncate-partial-width-windows nil)
-
-(add-hook 'after-init-hook 'delete-selection-mode)
-
-(add-hook 'after-init-hook 'global-auto-revert-mode)
-(setq global-auto-revert-non-file-buffers t
-      auto-revert-verbose nil)
-(with-eval-after-load 'autorevert
-  (diminish 'auto-revert-mode))
-
-(add-hook 'after-init-hook 'transient-mark-mode)
-
-
-;; 炫酷的特效，可以提示你的光标在哪里
+; 炫酷的特效，可以提示你的光标在哪里
 (when (maybe-require-package 'beacon)
   (setq-default beacon-lighter "")
   (setq-default beacon-size 20)
@@ -258,6 +255,11 @@
 (setq avy-keys '(?a ?r ?s ?t ?d ?h ?n ?e ?i ?o))
 
 
+;; 快速编辑文本
+(install-vc-package "https://github.com/manateelazycat/thing-edit" "thing-edit")
+(run-with-idle-timer 2 t (lambda () (require 'thing-edit)))
+
+
 ;; Undo Redo 集成
 (when (maybe-require-package 'undo-fu)
   (require-package 'undo-fu-session)
@@ -272,10 +274,11 @@
 
 ;; 自动保存
 (install-vc-package "https://github.com/manateelazycat/auto-save" "auto-save")
-(require 'auto-save)
-(setq auto-save-silent t)
-(setq auto-save-delete-trailing-whitespace t)
-(add-hook 'after-init-hook 'auto-save-enable)
+(run-with-idle-timer 2 t (lambda () (require 'auto-save)))
+(with-eval-after-load 'auto-save
+  (setq auto-save-silent t)
+  (setq auto-save-delete-trailing-whitespace t)
+  (auto-save-enable))
 
 
 ;; 展开区域
@@ -285,14 +288,24 @@
 
 ;; 使用 color-rg 来搜索和重构
 (install-vc-package "https://github.com/manateelazycat/color-rg" "color-rg")
-(require 'color-rg)
-(global-set-key (kbd "C-r") 'color-rg-search-input-in-project)
+(defun require-color-rg ()
+  (interactive)
+  (if (fboundp 'color-rg-mode)
+      (color-rg-search-input-in-project)
+    (progn (require 'color-rg)
+           (color-rg-search-input-in-project))))
+(global-set-key (kbd "C-r") 'require-color-rg)
 
 
 ;; 快速搜索
 (install-vc-package "https://github.com/manateelazycat/blink-search" "blink-search")
-(require 'blink-search)
-(global-set-key (kbd "C-c s") 'blink-search)
+(defun require-blink-search ()
+  (interactive)
+  (if (fboundp 'blink-search)
+      (blink-search)
+    (progn (require 'blink-search)
+           (blink-search))))
+(global-set-key (kbd "C-c s") 'require-blink-search)
 
 (when (display-graphic-p)
  (setq blink-search-enable-posframe t))
@@ -330,45 +343,13 @@
 
 ;; 查找孤立的函数
 (install-vc-package "https://github.com/manateelazycat/find-orphan" "find-orphan")
-(add-hook 'after-init-hook (lambda () (require 'find-orphan)))
-
-
-;; 快速编辑
-(install-vc-package "https://github.com/manateelazycat/thing-edit" "thing-edit")
-(add-hook 'after-init-hook (lambda () (require 'thing-edit)))
-(global-unset-key (kbd "C-c e"))
-(global-set-key (kbd "C-c e b") 'thing-cut-sexp)
-(global-set-key (kbd "C-c e u") 'thing-cut-url)
-(global-set-key (kbd "C-c e p") 'thing-cut-parentheses)
-(global-set-key (kbd "C-c e s") 'thing-cut-sentence)
-(global-set-key (kbd "C-c e w") 'thing-cut-word)
-(global-set-key (kbd "C-c e p") 'thing-cut-page)
-(global-set-key (kbd "C-c e l") 'thing-cut-line)
-(global-set-key (kbd "C-c e f") 'thing-cut-defun)
-(global-set-key (kbd "C-c e w") 'thing-cut-whole-buffer)
-(global-set-key (kbd "C-c c b") 'thing-copy-sexp)
-(global-set-key (kbd "C-c c u") 'thing-copy-url)
-(global-set-key (kbd "C-c c p") 'thing-copy-parentheses)
-(global-set-key (kbd "C-c c s") 'thing-copy-sentence)
-(global-set-key (kbd "C-c c w") 'thing-copy-word)
-(global-set-key (kbd "C-c c p") 'thing-copy-page)
-(global-set-key (kbd "C-c c l") 'thing-copy-line)
-(global-set-key (kbd "C-c c f") 'thing-copy-defun)
-(global-set-key (kbd "C-c c w") 'thing-copy-whole-buffer)
+(run-with-idle-timer 5 t (lambda () (require 'find-orphan)))
 
 
 ;; 建立Deno运行环境
 (require-package 'websocket)
-(install-vc-package "https://github.com/manateelazycat/deno-bridge" "deno-bridge")
-(add-hook 'after-init-hook (lambda () (require 'deno-bridge)))
-
-
-;; 插入翻译后的内容
-(defun insert-translated-name (content to)
-  (interactive "sContent: \nsTo: ")
-  (setq input (concat "trans -t " to " -b " content))
-  (insert (downcase (shell-command-to-string input)))
-  (puni-backward-delete-char))
+;; (install-vc-package "https://github.com/manateelazycat/deno-bridge" "deno-bridge")
+;; (add-hook 'after-init-hook (lambda () (require 'deno-bridge)))
 
 
 ;; 在英文单词与中文单词之间自动插入空格
@@ -396,9 +377,10 @@
 
 (require-package 'jsonrpc)
 (install-vc-package "https://github.com/cireu/jieba.el" "jieba")
-(require 'jieba)
-(add-hook 'after-init-hook 'jieba-mode)
+(run-with-idle-timer 3 t (lambda () (require 'jieba)))
 (global-set-key (kbd "M-m") 'jieba-mark-word)
+(with-eval-after-load 'jieba
+  (jieba-mode 1))
 
 (install-vc-package "https://github.com/Eason0210/im-cursor-chg" "im-cursor-chg")
 (with-eval-after-load 'rime
@@ -408,8 +390,9 @@
 
 ;; Eshell强化配置
 (install-vc-package "https://github.com/manateelazycat/aweshell" "aweshell")
-(require 'aweshell)
-(setq aweshell-auto-suggestion-p t)
+(run-with-idle-timer 3 t (lambda () (require 'aweshell)))
+(with-eval-after-load 'aweshell
+  (setq aweshell-auto-suggestion-p t))
 (global-set-key (kbd "C-c r") 'aweshell-dedicated-toggle)
 (global-set-key (kbd "C-c C-r") 'aweshell-new)
 

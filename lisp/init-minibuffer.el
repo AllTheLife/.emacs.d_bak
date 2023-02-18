@@ -34,6 +34,7 @@
 
 (require-package 'embark)
 (global-set-key (kbd "C-c C-e") 'embark-act)
+(setq embark-help-key "?")
 
 (when (and (fboundp 'vertico-mode) (fboundp 'embark-act))
   (require-package 'embark-consult))

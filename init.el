@@ -62,11 +62,11 @@
 (require 'init-prog)
 
 ;; 允许来自 emacsclient 的访问
-(add-hook 'after-init-hook
-          (lambda ()
-            (require 'server)
-            (unless (server-running-p)
-              (server-start))))
+;; (add-hook 'after-init-hook
+;;           (lambda ()
+;;             (require 'server)
+;;             (unless (server-running-p)
+;;               (server-start))))
 
 ;; 加载 custom.el
 (when (file-exists-p custom-file)

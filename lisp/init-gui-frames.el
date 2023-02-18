@@ -27,6 +27,7 @@
 ;; 设置字体
 (set-fontset-font t 'unicode (font-spec :family "SimHei" :size 15))
 
+
 
 ;; 浮动窗口
 
@@ -38,8 +39,9 @@
 
 ;; 标签栏增强
 (install-vc-package "https://github.com/manateelazycat/sort-tab" "sort-tab")
-(require 'sort-tab)
-(sort-tab-mode 1)
+(run-with-idle-timer 1 t (lambda () (require 'sort-tab)))
+(with-eval-after-load 'sort-tab
+  (sort-tab-mode 1))
 (global-set-key (kbd "C-1") 'sort-tab-select-visible-tab)
 (global-set-key (kbd "C-2") 'sort-tab-select-visible-tab)
 (global-set-key (kbd "C-3") 'sort-tab-select-visible-tab)

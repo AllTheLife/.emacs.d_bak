@@ -56,6 +56,7 @@
 (setq package-enable-at-startup nil)
 (package-initialize)
 
+
 
 ;; package.el 仅在加载完配置文件后才能正确地更新package-selected-packages中的软件包，这是一个bug。
 ;; 在启动完成后，我们将所加载的软件包添加到package-selected-packages 中来解决此问题。
@@ -109,10 +110,10 @@
 
 
 ;; 安装第三方软件包
-(defun install-vc-package (url name))
-  ;; (unless (file-exists-p (concat "~/.emacs.d/site-packages/" name))
-  ;;   (shell-command (concat "git clone " url " ~/.emacs.d/site-packages/" name)))
-  ;; (add-to-list 'load-path (concat "~/.emacs.d/site-packages/" name)))
+(defun install-vc-package (url name)
+  (unless (file-exists-p (concat "~/.emacs.d/site-lisp/" name))
+    (shell-command (concat "git clone " url " ~/.emacs.d/site-lisp/" name)))
+  (add-to-list 'load-path (concat "~/.emacs.d/site-lisp/" name)))
 
 
 (provide 'init-elpa)

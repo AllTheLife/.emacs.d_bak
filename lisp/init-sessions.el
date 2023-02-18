@@ -10,6 +10,8 @@
 
 ;; 重启后回复历史和寄存器
 
+(add-hook 'after-init-hook 'savehist-mode)
+
 (require-package 'session)
 
 (setq session-save-file (locate-user-emacs-file ".session"))
