@@ -150,8 +150,11 @@
 
 ;; 用Meow来管理Emacs的移动操作
 
-(when (maybe-require-package 'meow)
-  (require 'meow)
+(add-hook 'after-make-window-system-frame-hooks
+          (lambda () (progn (require-package 'meow)
+                            (require 'meow))))
+
+(with-eval-after-load 'meow
   (defun meow-setup ()
     (setq meow-cheatsheet-layout meow-cheatsheet-layout-colemak)
     (meow-motion-overwrite-define-key
@@ -234,12 +237,14 @@
      '("'" . repeat)
      '("<escape>" . ignore)))
   (meow-setup)
+
   (setq meow-replace-state-name-list
-	'((normal . "NOR")
+        '((normal . "NOR")
 	  (beacon . "BEA")
 	  (insert . "INS")
 	  (motion . "MOT")
 	  (keypad . "KEY")))
+
   (meow-global-mode 1))
 
 
@@ -250,14 +255,40 @@
 ;; 快速跳转
 (require-package 'avy)
 (global-set-key (kbd "C-c a c") 'avy-goto-char)
-(global-set-key (kbd "C-c a w") 'avy-goto-char-2)
+(global-set-key (kbd "C-c w") 'avy-goto-char-2)
 (global-set-key (kbd "C-c a b") 'avy-goto-word-0)
 (setq avy-keys '(?a ?r ?s ?t ?d ?h ?n ?e ?i ?o))
 
 
 ;; 快速编辑文本
+
 (install-vc-package "https://github.com/manateelazycat/thing-edit" "thing-edit")
-(run-with-idle-timer 2 t (lambda () (require 'thing-edit)))
+(run-with-idle-timer 2 nil (lambda () (require 'thing-edit)))
+
+(install-vc-package "https://github.com/lyjdwh/avy-thing-edit" "avy-thing-edit")
+(with-eval-after-load 'thing-edit
+  (require 'avy-thing-edit)
+  (global-set-key (kbd "C-c k u") 'avy-thing-cut-url)
+  (global-set-key (kbd "C-c k l") 'avy-thing-cut-line)
+  (global-set-key (kbd "C-c k w") 'avy-thing-cut-word)
+  (global-set-key (kbd "C-c k s") 'avy-thing-cut-sexp)
+  (global-set-key (kbd "C-c k p") 'avy-thing-cut-page)
+  (global-set-key (kbd "C-c k f") 'avy-thing-cut-defun)
+  (global-set-key (kbd "C-c k c") 'avy-thing-cut-comment)
+  (global-set-key (kbd "C-c k ,") 'avy-thing-cut-sentence)
+  (global-set-key (kbd "C-c k .") 'avy-thing-cut-paragraph)
+  (global-set-key (kbd "C-c k '") 'avy-thing-cut-parentheses)
+  (global-set-key (kbd "C-c C-k u") 'avy-thing-copy-url)
+  (global-set-key (kbd "C-c C-k l") 'avy-thing-copy-line)
+  (global-set-key (kbd "C-c C-k w") 'avy-thing-copy-word)
+  (global-set-key (kbd "C-c C-k s") 'avy-thing-copy-sexp)
+  (global-set-key (kbd "C-c C-k p") 'avy-thing-copy-page)
+  (global-set-key (kbd "C-c C-k f") 'avy-thing-copy-defun)
+  (global-set-key (kbd "C-c C-k c") 'avy-thing-copy-comment)
+  (global-set-key (kbd "C-c C-k ,") 'avy-thing-copy-sentence)
+  (global-set-key (kbd "C-c C-k .") 'avy-thing-copy-paragraph)
+  (global-set-key (kbd "C-c C-k '") 'avy-thing-copy-parentheses))
+
 
 
 ;; Undo Redo 集成
@@ -274,7 +305,7 @@
 
 ;; 自动保存
 (install-vc-package "https://github.com/manateelazycat/auto-save" "auto-save")
-(run-with-idle-timer 2 t (lambda () (require 'auto-save)))
+(run-with-idle-timer 2 nil (lambda () (require 'auto-save)))
 (with-eval-after-load 'auto-save
   (setq auto-save-silent t)
   (setq auto-save-delete-trailing-whitespace t)
@@ -299,6 +330,7 @@
 
 ;; 快速搜索
 (install-vc-package "https://github.com/manateelazycat/blink-search" "blink-search")
+
 (defun require-blink-search ()
   (interactive)
   (if (fboundp 'blink-search)
@@ -307,13 +339,10 @@
            (blink-search))))
 (global-set-key (kbd "C-c s") 'require-blink-search)
 
-(when (display-graphic-p)
- (setq blink-search-enable-posframe t))
+(advice-add 'blink-search :after 'meow-insert-mode)
+(add-hook 'after-make-window-system-frame-hooks
+          (lambda () (setq blink-search-enable-posframe t)))
 
-(when (fboundp 'meow-insert-mode)
-  (advice-add 'blink-search :after 'meow-insert-mode))
-
-;; (add-hook 'after-init-hook 'blink-search)
 
 
 ;; 必要时以root用户编辑文件
@@ -343,7 +372,7 @@
 
 ;; 查找孤立的函数
 (install-vc-package "https://github.com/manateelazycat/find-orphan" "find-orphan")
-(run-with-idle-timer 5 t (lambda () (require 'find-orphan)))
+(run-with-idle-timer 5 nil (lambda () (require 'find-orphan)))
 
 
 ;; 建立Deno运行环境
@@ -361,9 +390,10 @@
 (require-package 'which-key)
 (which-key-mode 1)
 
-(when (display-graphic-p)
- (require-package 'which-key-posframe)
- (which-key-posframe-mode 1))
+(require-package 'which-key-posframe)
+
+(add-hook 'after-make-window-system-frame-hooks
+          (lambda () (which-key-posframe-mode 1)))
 
 
 ;; 为Emacs提供中文支持
@@ -377,7 +407,7 @@
 
 (require-package 'jsonrpc)
 (install-vc-package "https://github.com/cireu/jieba.el" "jieba")
-(run-with-idle-timer 3 t (lambda () (require 'jieba)))
+(run-with-idle-timer 3 nil (lambda () (require 'jieba)))
 (global-set-key (kbd "M-m") 'jieba-mark-word)
 (with-eval-after-load 'jieba
   (jieba-mode 1))
@@ -390,7 +420,7 @@
 
 ;; Eshell强化配置
 (install-vc-package "https://github.com/manateelazycat/aweshell" "aweshell")
-(run-with-idle-timer 3 t (lambda () (require 'aweshell)))
+(run-with-idle-timer 3 nil (lambda () (require 'aweshell)))
 (with-eval-after-load 'aweshell
   (setq aweshell-auto-suggestion-p t))
 (global-set-key (kbd "C-c r") 'aweshell-dedicated-toggle)

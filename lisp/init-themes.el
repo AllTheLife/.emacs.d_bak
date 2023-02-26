@@ -11,7 +11,8 @@
 
 ;; 设置默认主题
 ;; (setq-default custom-enabled-themes '(doom-palenight))
-(setq-default custom-enabled-themes '(doom-gruvbox))
+;; (setq-default custom-enabled-themes '(doom-gruvbox))
+(setq-default custom-enabled-themes '(doom-one))
 
 ;; 确保主题启用，即使其未被定制
 (defun reapply-themes ()
@@ -19,7 +20,6 @@
   (dolist (theme custom-enabled-themes)
     (unless (custom-theme-p theme)
       (load-theme theme)))
-  ;; (mapc #'disable-theme custom-enabled-themes))
   (custom-set-variables `(custom-enabled-themes (quote ,custom-enabled-themes))))
 
 (reapply-themes)

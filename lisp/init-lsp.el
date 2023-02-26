@@ -5,7 +5,7 @@
 (require-package 'markdown-mode)
 
 (install-vc-package "https://github.com/manateelazycat/lsp-bridge" "lsp-bridge") ;; 从Github下载lsp-bridge
-(run-with-idle-timer 2 t (lambda () (require 'lsp-bridge)))
+(run-with-idle-timer 2 nil (lambda () (require 'lsp-bridge)))
 (with-eval-after-load 'lsp-bridge
   (add-hook 'emacs-lisp-mode-hook 'lsp-bridge-mode)
   (add-hook 'org-mode-hook 'lsp-bridge-mode)
@@ -35,8 +35,8 @@
   (add-hook 'python-ts-mode-hook 'eglot-ensure)
   (add-hook 'sh-ts-mode-hook 'eglot-ensure))
 
-;; (with-eval-after-load 'eglot
-;;   (add-to-list 'eglot-server-programs '((python-ts-mode python-mode) . ("pyright-langserver"))))
+;; (with-eval-after-load 'auto-save
+;;   (advice-add 'auto-save-buffers :before 'eglot-format-buffer))
 
 
 (provide 'init-lsp)

@@ -18,11 +18,13 @@
 
 ;; 在启动期间调整垃圾收集阈值以加快启动速度，之后恢复为正常大小
 
-(let ((normal-gc-cons-threshold (* 20 1024 1024))
+(let ((normal-gc-cons-threshold (* 50 1024 1024))
       (init-gc-cons-threshold (* 128 1024 1024)))
   (setq gc-cons-threshold init-gc-cons-threshold)
-  (add-hook 'emacs-startup-hook
-            (lambda () (setq gc-cons-threshold normal-gc-cons-threshold))))
+  (add-hook 'after-make-window-system-frame-hooks
+            (lambda () (run-with-idle-timer 5 nil
+                                            (lambda () (setq gc-cons-threshold
+                                                             normal-gc-cons-threshold))))))
 
 
 ;; 基础配置
@@ -41,11 +43,12 @@
 (require-package 'diminish)
 
 (require 'init-frame-hooks)
-(require 'init-themes)
 (require 'init-all-the-icons)
 (require 'init-gui-frames)
+(require 'init-ui)
+(require 'init-themes)
 (require 'init-dired)
-(add-hook 'after-init-hook (lambda () (require 'init-eaf)))
+(require 'init-eaf)
 
 (require 'init-company)
 (require 'init-yas)
@@ -60,13 +63,6 @@
 
 (require 'init-misc)
 (require 'init-prog)
-
-;; 允许来自 emacsclient 的访问
-;; (add-hook 'after-init-hook
-;;           (lambda ()
-;;             (require 'server)
-;;             (unless (server-running-p)
-;;               (server-start))))
 
 ;; 加载 custom.el
 (when (file-exists-p custom-file)

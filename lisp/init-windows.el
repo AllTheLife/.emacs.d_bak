@@ -5,6 +5,8 @@
 
 ;;; Code:
 
+(add-hook 'after-init-hook 'winner-mode)
+
 ;; 当窗口数目大于2时，按下 "C-x o" 来选择窗口
 (require-package 'switch-window)
 (setq-default switch-window-shortcut-style 'alphabet)
@@ -33,6 +35,26 @@
 (require-package 'winum)
 (setq winum-auto-setup-mode-line nil)
 (add-hook 'after-init-hook 'winum-mode)
+
+
+
+(defun toggle-delete-other-windows ()
+  "删除掉frame中的其他窗口(如果有), 不然恢复以前的窗口配置."
+  (interactive)
+  (if (and winner-mode
+           (equal (length (window-list)) 2)) ;; Because of `*sort-tab*'
+      (winner-undo)
+    (delete-other-windows)))
+
+(global-set-key (kbd "C-x 1") 'toggle-delete-other-windows)
+
+
+
+
+(unless (memq window-system '(nt w32))
+  (require-package 'windswap)
+  (add-hook 'after-init-hook (apply-partially 'windmove-default-keybindings 'control))
+  (add-hook 'after-init-hook (apply-partially 'windswap-default-keybindings 'shift 'control)))
 
 
 (provide 'init-windows)

@@ -24,7 +24,9 @@
   (define-key dirvish-mode-map (kbd "M-t") 'dirvish-layout-toggle)
   (define-key dirvish-mode-map (kbd "M-s") 'dirvish-setup-menu)
   (define-key dirvish-mode-map (kbd "M-e") 'dirvish-emerge-menu)
-  (define-key dirvish-mode-map (kbd "M-j") 'dirvish-fd-jump))
+  (define-key dirvish-mode-map (kbd "M-j") 'dirvish-fd-jump)
+
+  (global-set-key (kbd "C-c d") 'dirvish-side))
 
 (provide 'init-dired)
 ;;; init-dired.el ends here

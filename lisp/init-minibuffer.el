@@ -28,9 +28,8 @@
 (setq completion-styles '(orderless basic)
       completion-category-overrides '((file (styles basic partial-completion))))
 
-(when (display-graphic-p)
-  (require-package 'vertico-posframe)
-  (add-hook 'after-init-hook 'vertico-posframe-mode))
+(require-package 'vertico-posframe)
+(add-hook 'after-make-window-system-frame-hooks 'vertico-posframe-mode)
 
 (require-package 'embark)
 (global-set-key (kbd "C-c C-e") 'embark-act)

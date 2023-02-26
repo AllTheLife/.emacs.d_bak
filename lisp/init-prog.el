@@ -46,6 +46,20 @@
         (yaml . ("https://github.com/ikatyang/tree-sitter-yaml"))))
 
 (add-hook 'emacs-lisp-mode-hook #'(lambda () (treesit-parser-create 'elisp)))
+(add-hook 'c++-mode-hook #'(lambda () (treesit-parser-create 'cpp)))
+(add-hook 'c-mode-hook #'(lambda () (treesit-parser-create 'c)))
+
+(setq major-mode-remap-alist
+      '(;; (c-mode          . c-ts-mode)
+        ;; (c++-mode        . c++-ts-mode)
+        (cmake-mode      . cmake-ts-mode)
+        (conf-toml-mode  . toml-ts-mode)
+        (css-mode        . css-ts-mode)
+        (js-mode         . js-ts-mode)
+        (js-json-mode    . json-ts-mode)
+        (python-mode     . python-ts-mode)
+        (sh-mode         . bash-ts-mode)
+        (typescript-mode . typescript-ts-mode)))
 
 
 
@@ -59,11 +73,6 @@
 (advice-add 'maple-run:finish :after (lambda () (kill-buffer "*maple-run-process*")))
 (setq maple-run:timeout 20000)
 (global-set-key (kbd "C-c X") 'maple-run)
-;; (require-package 'quickrun)
-;; (global-set-key (kbd "C-c q q") 'quickrun)
-;; (global-set-key (kbd "C-c q b") 'quickrun-region)
-;; (global-set-key (kbd "C-c q c") 'quickrun-compile-only)
-;; (global-set-key (kbd "C-c q i") 'quickrun-replace-region)
 
 
 ;; 在标签栏下方显示一个 Sticky Header
@@ -77,9 +86,6 @@
 (add-hook 'prog-mode-hook 'origami-mode)
 (global-set-key (kbd "C-<tab>") 'origami-toggle-node)
 
-
-;; 在modeline中显示在哪个函数中
-(add-hook 'prog-mode-hook 'which-function-mode)
 
 (provide 'init-prog)
 ;;; init-prog.el ends here
