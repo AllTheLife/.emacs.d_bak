@@ -13,7 +13,7 @@
 
 ;; (setq inhibit-automatic-native-compilation t)
 ;; (setq package-native-compile t)
-;; (native-compile-async "~/.emacs.d/site-packages" 'recursively)
+;; (native-compile-async "~/.emacs.d/site-lisp" 'recursively)
 
 (provide 'early-init)
 

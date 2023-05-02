@@ -22,6 +22,7 @@
   (add-hook 'c-ts-mode-hook 'company-mode)
   (add-hook 'python-ts-mode-hook 'company-mode)
   (add-hook 'sh-ts-mode-hook 'company-mode)
+  (add-hook 'mhtml-mode-hook 'company-mode)
 
   (when (fboundp 'diminish)
     (add-hook 'company-mode-hook (lambda () (diminish 'company-mode))))

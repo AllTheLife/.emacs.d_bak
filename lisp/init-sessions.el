@@ -11,8 +11,11 @@
 ;; 重启后回复历史和寄存器
 
 (add-hook 'after-init-hook 'savehist-mode)
+
 (when (fboundp 'save-place-mode)
   (save-place-mode))
+
+(setq save-place-forget-unreadable-files nil)
 
 ;; (require-package 'session)
 

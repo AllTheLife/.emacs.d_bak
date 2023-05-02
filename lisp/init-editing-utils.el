@@ -30,8 +30,10 @@
 
 (add-hook 'after-init-hook 'transient-mark-mode)
 
+
 
 ;;; 结构化编辑
+
 (install-vc-package "https://github.com/manateelazycat/fingertip" "fingertip")
 (require 'fingertip)
 (dolist (hook (list
@@ -109,16 +111,9 @@
 
   (define-key fingertip-mode-map (kbd "C-j") 'fingertip-jump-out-pair-and-newline))
 
-
-; 炫酷的特效，可以提示你的光标在哪里
-(when (maybe-require-package 'beacon)
-  (setq-default beacon-lighter "")
-  (setq-default beacon-size 20)
-  (beacon-mode)
-  (add-hook 'after-init-hook 'beacon-mode))
 
 
-;; 识别驼峰式单词
+;;; 识别驼峰式单词
 
 (require 'subword)
 (add-hook 'prog-mode-hook 'subword-mode)
@@ -127,19 +122,7 @@
   (diminish 'subword-mode))
 
 
-;; 绘制行号
-(when (fboundp 'display-line-numbers-mode)
-  (setq-default display-line-numbers-width 3)
-  (add-hook 'prog-mode-hook 'display-line-numbers-mode))
-
-
-;; 彩虹括号
-
-(require-package 'rainbow-delimiters)
-(add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
-
-
-;; 将换行符显示为水平直线
+;;; 将换行符显示为水平直线
 
 (when (maybe-require-package 'page-break-lines)
   (add-hook 'after-init-hook 'global-page-break-lines-mode)
@@ -148,12 +131,11 @@
     (diminish 'page-break-lines-mode)))
 
 
-;; 用Meow来管理Emacs的移动操作
+;;; 用Meow来管理Emacs的移动操作
 
 (add-hook 'after-make-window-system-frame-hooks
           (lambda () (progn (require-package 'meow)
                             (require 'meow))))
-
 (with-eval-after-load 'meow
   (defun meow-setup ()
     (setq meow-cheatsheet-layout meow-cheatsheet-layout-colemak)
@@ -247,51 +229,16 @@
 
   (meow-global-mode 1))
 
+
 
-;; 按下 "C-c /" 来注释
+;;; 按下 "C-c /" 来注释
+
 (global-set-key (kbd "C-c /") 'comment-or-uncomment-region)
 
-
-;; 快速跳转
-(require-package 'avy)
-(global-set-key (kbd "C-c a c") 'avy-goto-char)
-(global-set-key (kbd "C-c w") 'avy-goto-char-2)
-(global-set-key (kbd "C-c a b") 'avy-goto-word-0)
-(setq avy-keys '(?a ?r ?s ?t ?d ?h ?n ?e ?i ?o))
 
 
-;; 快速编辑文本
+;;; Undo Redo 集成
 
-(install-vc-package "https://github.com/manateelazycat/thing-edit" "thing-edit")
-(run-with-idle-timer 2 nil (lambda () (require 'thing-edit)))
-
-(install-vc-package "https://github.com/lyjdwh/avy-thing-edit" "avy-thing-edit")
-(with-eval-after-load 'thing-edit
-  (require 'avy-thing-edit)
-  (global-set-key (kbd "C-c k u") 'avy-thing-cut-url)
-  (global-set-key (kbd "C-c k l") 'avy-thing-cut-line)
-  (global-set-key (kbd "C-c k w") 'avy-thing-cut-word)
-  (global-set-key (kbd "C-c k s") 'avy-thing-cut-sexp)
-  (global-set-key (kbd "C-c k p") 'avy-thing-cut-page)
-  (global-set-key (kbd "C-c k f") 'avy-thing-cut-defun)
-  (global-set-key (kbd "C-c k c") 'avy-thing-cut-comment)
-  (global-set-key (kbd "C-c k ,") 'avy-thing-cut-sentence)
-  (global-set-key (kbd "C-c k .") 'avy-thing-cut-paragraph)
-  (global-set-key (kbd "C-c k '") 'avy-thing-cut-parentheses)
-  (global-set-key (kbd "C-c C-k u") 'avy-thing-copy-url)
-  (global-set-key (kbd "C-c C-k l") 'avy-thing-copy-line)
-  (global-set-key (kbd "C-c C-k w") 'avy-thing-copy-word)
-  (global-set-key (kbd "C-c C-k s") 'avy-thing-copy-sexp)
-  (global-set-key (kbd "C-c C-k p") 'avy-thing-copy-page)
-  (global-set-key (kbd "C-c C-k f") 'avy-thing-copy-defun)
-  (global-set-key (kbd "C-c C-k c") 'avy-thing-copy-comment)
-  (global-set-key (kbd "C-c C-k ,") 'avy-thing-copy-sentence)
-  (global-set-key (kbd "C-c C-k .") 'avy-thing-copy-paragraph)
-  (global-set-key (kbd "C-c C-k '") 'avy-thing-copy-parentheses))
-
-
-
-;; Undo Redo 集成
 (when (maybe-require-package 'undo-fu)
   (require-package 'undo-fu-session)
   (require-package 'vundo)
@@ -302,8 +249,10 @@
   (global-set-key (kbd "C-z")   'undo-fu-only-undo)
   (global-set-key (kbd "C-S-z") 'undo-fu-only-redo))
 
+
 
-;; 自动保存
+;;; 自动保存
+
 (install-vc-package "https://github.com/manateelazycat/auto-save" "auto-save")
 (run-with-idle-timer 2 nil (lambda () (require 'auto-save)))
 (with-eval-after-load 'auto-save
@@ -311,13 +260,17 @@
   (setq auto-save-delete-trailing-whitespace t)
   (auto-save-enable))
 
+
 
-;; 展开区域
+;;; 展开区域
+
 (require-package 'expand-region)
 (global-set-key (kbd "C-=") 'er/expand-region)
 
+
 
-;; 使用 color-rg 来搜索和重构
+;;; 使用 color-rg 来搜索和重构
+
 (install-vc-package "https://github.com/manateelazycat/color-rg" "color-rg")
 (defun require-color-rg ()
   (interactive)
@@ -328,65 +281,43 @@
 (global-set-key (kbd "C-r") 'require-color-rg)
 
 
-;; 快速搜索
-(install-vc-package "https://github.com/manateelazycat/blink-search" "blink-search")
+;;; 像兔子一样在标记之间跳跃
 
-(defun require-blink-search ()
-  (interactive)
-  (if (fboundp 'blink-search)
-      (blink-search)
-    (progn (require 'blink-search)
-           (blink-search))))
-(global-set-key (kbd "C-c s") 'require-blink-search)
-
-(advice-add 'blink-search :after 'meow-insert-mode)
-(add-hook 'after-make-window-system-frame-hooks
-          (lambda () (setq blink-search-enable-posframe t)))
-
-
-
-;; 必要时以root用户编辑文件
-(require-package 'sudo-edit)
-
-
-;; 想兔子一样在标记之间跳跃
 (install-vc-package "https://github.com/liuyinz/binky-mode" "binky-mode")
 (require 'binky-mode)
+
 (add-to-list 'after-init-hook 'binky-mode)
 (add-to-list 'after-init-hook 'binky-margin-mode)
 (global-set-key (kbd "C-c b a") 'binky-add)
 (global-set-key (kbd "C-c b j") 'binky-jump)
 
-
-;; 翻译单词
-(require-package 'go-translate)
-(with-eval-after-load 'go-translate
-  (setq gts-translate-list '(("en" "zh")))
-  (setq gts-default-translator
-        (gts-translator
-         :picker (gts-prompt-picker)
-         :engines (list (gts-google-engine) (gts-stardict-engine))
-         :render (gts-posframe-pin-render))))
-(global-set-key (kbd "C-c t") 'gts-do-translate)
 
 
-;; 查找孤立的函数
+;;; 查找孤立的函数
+
 (install-vc-package "https://github.com/manateelazycat/find-orphan" "find-orphan")
 (run-with-idle-timer 5 nil (lambda () (require 'find-orphan)))
 
-
-;; 建立Deno运行环境
-(require-package 'websocket)
-;; (install-vc-package "https://github.com/manateelazycat/deno-bridge" "deno-bridge")
-;; (add-hook 'after-init-hook (lambda () (require 'deno-bridge)))
 
 
-;; 在英文单词与中文单词之间自动插入空格
+;;; 插入翻译后的名字
+
+(install-vc-package "https://github.com/manateelazycat/insert-translated-name" "insert-translated-name")
+(with-eval-after-load 'deno-bridge
+  (require 'insert-translated-name)
+  (global-set-key (kbd "C-c i n") 'insert-translated-name-insert))
+
+
+
+;;; 在英文单词与中文单词之间自动插入空格
+
 (require-package 'pangu-spacing)
 (global-pangu-spacing-mode)
 
+
 
-;; 到底是哪个按键呢？
+;;; 到底是哪个按键呢？
+
 (require-package 'which-key)
 (which-key-mode 1)
 
@@ -395,8 +326,9 @@
 (add-hook 'after-make-window-system-frame-hooks
           (lambda () (which-key-posframe-mode 1)))
 
+
 
-;; 为Emacs提供中文支持
+;;; 为Emacs提供中文支持
 
 (require-package 'rime)
 (setq default-input-method "rime"
@@ -417,30 +349,10 @@
   (require 'im-cursor-chg)
   (cursor-chg-mode 1))
 
-
-;; Eshell强化配置
-(install-vc-package "https://github.com/manateelazycat/aweshell" "aweshell")
-(run-with-idle-timer 3 nil (lambda () (require 'aweshell)))
-(with-eval-after-load 'aweshell
-  (setq aweshell-auto-suggestion-p t))
-(global-set-key (kbd "C-c r") 'aweshell-dedicated-toggle)
-(global-set-key (kbd "C-c C-r") 'aweshell-new)
 
 
-;; 轻松粘贴代码到笔记里
-(install-vc-package "https://github.com/AmaiKinono/clue" "clue")
-(require 'clue)
-(add-hook 'find-file-hook #'clue-auto-enable-clue-mode)
+;;; 运行Org-mode中的代码片段
 
-
-;; 记录上一次文件打开的位置, 并在再次打开该文件的时候自动跳转到该位置
-;; (when (maybe-require-package 'savehist)
-;;   (add-hook 'after-init-hook 'savehist-mode))
-;; (save-place-mode 1)
-;; (setq session-save-file-coding-system 'utf-8)
-
-
-;; 运行Org-mode中的代码片段
 (org-babel-do-load-languages
       'org-babel-load-languages
       '((emacs-lisp . t)
@@ -454,6 +366,32 @@
         (latex . t)
         (plantuml . t)
         (R . t)))
+
+
+
+;;; 操作多个symbol
+
+(require-package 'symbol-overlay)
+
+(with-eval-after-load 'symbol-overlay-autoloads
+  (add-hook 'prog-mode-hook 'symbol-overlay-mode)
+  (add-hook 'org-mode-hook 'symbol-overlay-mode)
+  (global-set-key (kbd "M-i") 'symbol-overlay-put)
+  (global-set-key (kbd "C-M-i") 'symbol-overlay-remove-all))
+
+
+
+;;; 使用喜欢的模式在单独的缓冲区中编辑注释/字符串/文档字符串/代码块
+
+(require 'separedit)
+
+(define-key prog-mode-map        (kbd "C-c '") #'separedit)
+(define-key minibuffer-local-map (kbd "C-c '") #'separedit)
+(define-key help-mode-map        (kbd "C-c '") #'separedit)
+
+(setq separedit-default-mode 'org-mode)
+(setq separedit-write-file-when-execute-save t)
+(setq separedit-remove-trailing-spaces-in-comment t)
 
 
 (provide 'init-editing-utils)

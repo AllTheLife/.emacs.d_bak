@@ -1,11 +1,26 @@
-;;; init-prog.el --- Initialize programming configurations -*- lexical-binding: t -*-
+;;; init-prog.el --- 初始化编程配置 -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;; Code:
+
+
+;; 绘制行号
+
+(when (fboundp 'display-line-numbers-mode)
+  (setq-default display-line-numbers-width 3)
+  (add-hook 'prog-mode-hook 'display-line-numbers-mode))
+
+
 
 ;; 在行号旁显示文件指示符
 (when (boundp 'display-fill-column-indicator)
   (setq-default indicate-buffer-boundaries 'left)
   (add-hook 'prog-mode-hook 'display-fill-column-indicator-mode))
+
+
+;; 彩虹括号
+
+(require-package 'rainbow-delimiters)
+(add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
 
 
 ;; Tree-sitter 配置
@@ -48,6 +63,7 @@
 (add-hook 'emacs-lisp-mode-hook #'(lambda () (treesit-parser-create 'elisp)))
 (add-hook 'c++-mode-hook #'(lambda () (treesit-parser-create 'cpp)))
 (add-hook 'c-mode-hook #'(lambda () (treesit-parser-create 'c)))
+(add-hook 'mhtml-mode-hook #'(lambda () (treesit-parser-create 'html)))
 
 (setq major-mode-remap-alist
       '(;; (c-mode          . c-ts-mode)

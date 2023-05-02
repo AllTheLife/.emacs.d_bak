@@ -83,10 +83,19 @@
         (dolist (theme custom-enabled-themes)
           (load-theme theme))
         (solaire-global-mode +1))))
+
 (add-hook 'after-make-window-system-frame-hooks
           (lambda ()
             (run-with-idle-timer 0.01 nil
                                  'load-solaire-mode)))
+
+
+
+;; 让Emacs支持Emoji
+(require-package 'emojify)
+
+(add-hook 'after-make-window-system-frame-hooks
+          'global-emojify-mode)
 
 
 (provide 'init-ui)

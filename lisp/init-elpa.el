@@ -110,10 +110,20 @@
 
 
 ;; 安装第三方软件包
+
+(defvar site-packages nil
+  "用来存放第三方软件包的地址")
+
 (defun install-vc-package (url name)
   (unless (file-exists-p (concat "~/.emacs.d/site-lisp/" name))
     (shell-command (concat "git clone " url " ~/.emacs.d/site-lisp/" name)))
-  (add-to-list 'load-path (concat "~/.emacs.d/site-lisp/" name)))
+  (add-to-list 'load-path (concat "~/.emacs.d/site-lisp/" name) t)
+  (add-to-list 'site-packages (concat "~/.emacs.d/site-lisp/" name) t))
+
+(defun update-vc-packages ()
+  (interactive)
+  (dolist (path site-packages)
+    (shell-command (concat "cd " path "; git pull"))))
 
 
 (provide 'init-elpa)

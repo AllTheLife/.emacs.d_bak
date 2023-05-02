@@ -1,4 +1,4 @@
-;;; init-minibuffer.el --- Config for minibuffer completion       -*- lexical-binding: t; -*-
+;;; init-minibuffer.el --- 配置 minibuffer 中的补全 -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;;; Code:
 

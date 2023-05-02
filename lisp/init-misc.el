@@ -8,6 +8,16 @@
 ;; See `https://emacs.stackexchange.com/questions/26565/exiting-emacs-without-confirmation-to-kill-running-processes'
 (setq confirm-kill-processes nil)
 
+;; 忽略 byte-compile 警告
+(setq byte-compile-warnings '(not nresolved
+                                  free-vars
+                                  callargs
+                                  redefine
+                                  obsolete
+                                  noruntime
+                                  cl-functions
+                                  interactive-only))
+
 
 (provide 'init-misc)
 ;;; init-misc.el ends here
